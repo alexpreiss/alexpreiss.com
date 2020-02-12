@@ -27,15 +27,23 @@ export default function SignupForm({ setUsername }) {
     validate,
     onSubmit: values => {
       axios
-        .post("localhost:7500/user/signin", {
-          data: {
+        .post(
+          "http://localhost:7500/user/signin",
+          {
             username: values.username,
             password: values.password,
           },
-          crossdomain: true,
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+              "Content-Type": "application/json",
+            },
+          }
+        )
+        .then(result => {
+          setUsername(result.data.username)
         })
-        .then(result => setUsername(result.username))
-        .catch(err => console.log(err))
+        .catch(err => console.log({ error: err }))
     },
   })
   return (
