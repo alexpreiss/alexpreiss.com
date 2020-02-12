@@ -1,14 +1,20 @@
 import React from "react"
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom"
+import { connect } from "react-redux"
 
 import Home from "./pages/index.js"
 import About from "./pages/about.js"
-import Login from "./pages/login"
+import Login from "./pages/login/container"
 
-export default class App extends React.Component {
+class App extends React.Component {
+  componentDidMount() {
+    // this.props.setUsername("Alex Preiss")
+  }
+
   render() {
     return (
       <Router>
+        <div>Welcome {this.props.state.username}</div>
         <div>
           <nav>
             <ul>
@@ -42,3 +48,13 @@ export default class App extends React.Component {
     )
   }
 }
+
+const mapStateToProps = (state, ownProps) => ({
+  state: state.auth,
+  ...ownProps,
+})
+
+export default connect(
+  mapStateToProps,
+  {}
+)(App)
