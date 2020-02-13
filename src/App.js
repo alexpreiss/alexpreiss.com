@@ -5,12 +5,9 @@ import { connect } from "react-redux"
 import Home from "./pages/index.js"
 import About from "./pages/about.js"
 import Login from "./pages/login/container"
+import Signup from "./pages/signup/container"
 
 class App extends React.Component {
-  componentDidMount() {
-    // this.props.setUsername("Alex Preiss")
-  }
-
   render() {
     return (
       <Router>
@@ -37,6 +34,10 @@ class App extends React.Component {
 
             <Route path="/login">
               <Login />
+            </Route>
+
+            <Route path="/signup">
+              <Signup />
             </Route>
 
             <Route path="/">

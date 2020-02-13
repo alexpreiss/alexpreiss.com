@@ -1,5 +1,5 @@
 import React from "react"
-import LoginForm from "../../components/form/login"
+import SignupForm from "../../components/form/signup"
 
 export default class Login extends React.Component {
   render() {
@@ -12,8 +12,8 @@ export default class Login extends React.Component {
           width: "50%",
         }}
       >
-        <h3>Log in</h3>
-        <LoginForm setUsername={this.props.setUsername} />
+        <h3>Sign up</h3>
+        <SignupForm setUsername={this.props.setUsername} />
       </div>
     )
   }

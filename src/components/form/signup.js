@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { useFormik } from "formik"
 import axios from "axios"
 import { Link } from "react-router-dom"
@@ -9,8 +9,6 @@ export default function SignupForm({ setUsername }) {
   // be called when the form is submitted
 
   let history = useHistory()
-
-  const [error, setError] = useState("")
 
   const validate = values => {
     const errors = {}
@@ -34,7 +32,7 @@ export default function SignupForm({ setUsername }) {
     onSubmit: values => {
       axios
         .post(
-          "http://localhost:7500/user/signin",
+          "http://localhost:7500/user/signup",
           {
             username: values.username,
             password: values.password,
@@ -47,12 +45,11 @@ export default function SignupForm({ setUsername }) {
           }
         )
         .then(result => {
-          setUsername(result.data.username)
+          console.log(result)
+          setUsername(result.data.user.username)
           history.push("/")
         })
-        .catch(({ response }) => {
-          setError(response.data.error)
-        })
+        .catch(err => console.log({ error: err }))
     },
   })
   return (
@@ -92,9 +89,9 @@ export default function SignupForm({ setUsername }) {
       ) : null}
 
       <button type="submit">Submit</button>
-      {error ? <div>{error}</div> : null}
+
       <div>
-        Don't have an account? <Link to="/signup">Sign up now</Link>
+        <Link to="/login">Back to log in</Link>
       </div>
     </form>
   )
