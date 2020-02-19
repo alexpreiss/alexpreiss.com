@@ -1,7 +1,7 @@
 import React from "react"
-import SignupForm from "../../components/form/signup"
+import UploadForm from "../../components/form/upload"
 
-export default class Login extends React.Component {
+export default class Upload extends React.Component {
   render() {
     return (
       <div
@@ -12,8 +12,8 @@ export default class Login extends React.Component {
           width: "50%",
         }}
       >
-        <h3>Sign up</h3>
-        <SignupForm />
+        <h3>Upload</h3>
+        <UploadForm />
       </div>
     )
   }

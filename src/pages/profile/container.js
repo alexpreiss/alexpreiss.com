@@ -4,7 +4,7 @@ import { setUser } from "../../actions/auth"
 import LoginPage from "./"
 
 const mapStateToProps = (state, ownProps) => ({
-  state: state.general,
+  state: state.auth,
   ...ownProps,
 })
 

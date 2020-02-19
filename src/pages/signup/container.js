@@ -1,5 +1,4 @@
 import { connect } from "react-redux"
-import { setUsername } from "../../actions/auth"
 
 import LoginPage from "./"
 
@@ -10,5 +9,5 @@ const mapStateToProps = (state, ownProps) => ({
 
 export default connect(
   mapStateToProps,
-  { setUsername }
+  {}
 )(LoginPage)

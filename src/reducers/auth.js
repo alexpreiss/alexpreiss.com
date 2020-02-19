@@ -1,11 +1,11 @@
-import { SET_USERNAME } from "../actions/auth"
+import { SET_USER } from "../actions/auth"
 
 const auth = (state = { username: "" }, action) => {
   switch (action.type) {
-    case SET_USERNAME:
+    case SET_USER:
       return {
         ...state,
-        username: action.username,
+        username: action.user.username,
       }
     default:
       return state

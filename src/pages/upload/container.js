@@ -1,7 +1,6 @@
 import { connect } from "react-redux"
-import { setUser } from "../../actions/auth"
 
-import LoginPage from "./"
+import UploadPage from "./"
 
 const mapStateToProps = (state, ownProps) => ({
   state: state.general,
@@ -10,5 +9,5 @@ const mapStateToProps = (state, ownProps) => ({
 
 export default connect(
   mapStateToProps,
-  { setUser }
-)(LoginPage)
+  {}
+)(UploadPage)

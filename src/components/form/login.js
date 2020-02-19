@@ -4,7 +4,7 @@ import axios from "axios"
 import { Link } from "react-router-dom"
 import { useHistory } from "react-router-dom"
 
-export default function SignupForm({ setUsername }) {
+export default function SigninForm({ setUser }) {
   // Pass the useFormik() hook initial form values and a submit function that will
   // be called when the form is submitted
 
@@ -47,11 +47,14 @@ export default function SignupForm({ setUsername }) {
           }
         )
         .then(result => {
-          setUsername(result.data.username)
+          setUser({ username: result.data.user.username })
+          localStorage.setItem("token", result.data.token)
+          localStorage.setItem("loggedIn", true)
           history.push("/")
         })
-        .catch(({ response }) => {
-          setError(response.data.error)
+        .catch(ref => {
+          // setError(response.data.error)
+          console.log(ref)
         })
     },
   })

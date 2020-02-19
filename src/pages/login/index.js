@@ -13,7 +13,7 @@ export default class Login extends React.Component {
         }}
       >
         <h3>Log in</h3>
-        <LoginForm setUsername={this.props.setUsername} />
+        <LoginForm setUser={this.props.setUser} />
       </div>
     )
   }
