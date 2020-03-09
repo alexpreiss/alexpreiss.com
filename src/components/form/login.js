@@ -53,8 +53,7 @@ export default function SigninForm({ setUser }) {
           history.push("/")
         })
         .catch(ref => {
-          // setError(response.data.error)
-          console.log(ref)
+          // setError(ref.data.error)
         })
     },
   })

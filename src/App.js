@@ -4,12 +4,15 @@ import { connect } from "react-redux"
 import axios from "axios"
 
 import Home from "./pages/index.js"
-import About from "./pages/about.js"
+import Explore from "./pages/explore"
 import Login from "./pages/login/container"
 import Signup from "./pages/signup/container"
+import Post from "./pages/post/container"
 import Profile from "./pages/profile/container"
 import Upload from "./pages/upload/container"
-import { setUser } from "./actions/auth"
+import { setUser, setAuthState } from "./actions/auth"
+import { setPlaying } from "./actions/audio"
+import Audio from "./components/audio"
 
 class App extends React.Component {
   componentDidMount() {
@@ -27,11 +30,16 @@ class App extends React.Component {
             },
           }
         )
-        .then(res => this.props.setUser({ username: res.data.username }))
+        .then(res => {
+          this.props.setUser({ username: res.data.username, id: res.data.id })
+          this.props.setAuthState("authenticated")
+        })
+    } else {
+      this.props.setAuthState("guest")
     }
   }
 
-  render() {
+  displayApp() {
     return (
       <Router>
         <div>
@@ -42,6 +50,10 @@ class App extends React.Component {
               backgroundColor: "black",
               color: "white",
               padding: "10px 25px",
+              position: "fixed",
+              right: 0,
+              left: 0,
+              top: 0,
             }}
           >
             <div
@@ -52,12 +64,12 @@ class App extends React.Component {
               <Link style={{ color: "white", marginRight: "20px" }} to="/">
                 Home
               </Link>
-              <Link style={{ color: "white" }} to="/about">
-                About
+              <Link style={{ color: "white" }} to="/explore">
+                Explore
               </Link>
             </div>
 
-            {this.props.state.username !== "" ? (
+            {this.props.state.auth.username !== "" ? (
               <div
                 style={{
                   display: "flex",
@@ -69,7 +81,7 @@ class App extends React.Component {
                 </Link>
                 <Link
                   style={{ color: "white", marginLeft: "20px" }}
-                  to="/profile"
+                  to={"/users/" + this.props.state.auth.username}
                 >
                   Profile
                 </Link>
@@ -77,13 +89,14 @@ class App extends React.Component {
                   style={{
                     color: "white",
                     cursor: "pointer",
-                    "text-decoration": "underline",
+                    textDecoration: "underline",
                     marginLeft: "20px",
                   }}
                   onClick={() => {
                     localStorage.removeItem("token")
                     localStorage.setItem("loggedIn", false)
                     this.props.setUser({ username: "" })
+                    window.location.reload()
                   }}
                 >
                   Logout
@@ -96,10 +109,59 @@ class App extends React.Component {
             )}
           </nav>
 
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <Audio state={this.props.state.audio} />
+
+          {this.props.state.audio.src !== "" && (
+            <div
+              style={{
+                bottom: "0",
+                left: "0",
+                right: "0",
+                backgroundColor: "black",
+                display: "flex",
+                position: "fixed",
+              }}
+            >
+              {this.props.state.audio.playing ? (
+                <div
+                  onClick={() => {
+                    this.props.setPlaying(false)
+                  }}
+                  style={{
+                    color: "white",
+                    padding: "10px 25px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Pause
+                </div>
+              ) : (
+                <div
+                  onClick={() => {
+                    this.props.setPlaying(true)
+                  }}
+                  style={{
+                    color: "white",
+                    padding: "10px 25px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Play
+                </div>
+              )}
+              {/* / {this.audio.duration} */}
+            </div>
+          )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "41px 0px",
+            }}
+          >
             <Switch>
-              <Route path="/about">
-                <About />
+              <Route path="/explore">
+                <Explore />
               </Route>
 
               <Route path="/login">
@@ -110,9 +172,9 @@ class App extends React.Component {
                 <Signup />
               </Route>
 
-              <Route path="/profile">
-                <Profile />
-              </Route>
+              <Route path="/users/:username" component={Profile} />
+
+              <Route path="/posts/:postId" component={Post} />
 
               <Route path="/upload">
                 <Upload />
@@ -127,14 +189,28 @@ class App extends React.Component {
       </Router>
     )
   }
+
+  render() {
+    switch (this.props.state.auth.authState) {
+      case "guest": {
+        return this.displayApp()
+      }
+      case "authenticated": {
+        return this.displayApp()
+      }
+      default: {
+        return <div>Logging in...</div>
+      }
+    }
+  }
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  state: state.auth,
+  state,
   ...ownProps,
 })
 
 export default connect(
   mapStateToProps,
-  { setUser }
+  { setUser, setAuthState, setPlaying }
 )(App)

@@ -1,0 +1,9 @@
+.post {
+  display: flex;
+  flex-direction: column;
+  border: 1px grey solid;
+  margin: 25px 0px;
+}
+.post-body {
+  padding: 10px;
+}

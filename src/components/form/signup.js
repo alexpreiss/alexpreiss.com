@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useFormik } from "formik"
 import axios from "axios"
 import { Link } from "react-router-dom"
@@ -7,6 +7,12 @@ import { useHistory } from "react-router-dom"
 export default function SignupForm() {
   // Pass the useFormik() hook initial form values and a submit function that will
   // be called when the form is submitted
+
+  const [file, setFile] = useState({})
+
+  const handleFileInputChange = event => {
+    setFile(event.target.files[0])
+  }
 
   let history = useHistory()
 
@@ -30,20 +36,21 @@ export default function SignupForm() {
     },
     validate,
     onSubmit: values => {
+      const formData = new FormData()
+
+      if (file) {
+        formData.append("profilePicture", file, file.name)
+      }
+      formData.append("username", values.username)
+      formData.append("password", values.password)
+
       axios
-        .post(
-          "http://localhost:7500/user/signup",
-          {
-            username: values.username,
-            password: values.password,
+        .post("http://localhost:7500/user/signup", formData, {
+          headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Content-Type": "application/json",
           },
-          {
-            headers: {
-              "Access-Control-Allow-Origin": "*",
-              "Content-Type": "application/json",
-            },
-          }
-        )
+        })
         .then(result => {
           history.push("/login")
         })
@@ -85,6 +92,15 @@ export default function SignupForm() {
       {formik.touched.password && formik.errors.password ? (
         <div>{formik.errors.password}</div>
       ) : null}
+
+      <label htmlFor="profilePicture">Profile Picture</label>
+      <input
+        id="profilePicture"
+        name="profilePicture"
+        type="file"
+        onChange={handleFileInputChange}
+        accept="image"
+      />
 
       <button type="submit">Submit</button>
 
